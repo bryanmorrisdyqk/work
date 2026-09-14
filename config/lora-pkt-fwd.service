@@ -1,0 +1,22 @@
+[Unit]
+Description=Semtech SX1302/SX1303 LoRa packet forwarder (GPS timestamping)
+Documentation=https://github.com/Lora-net/sx1302_hal
+Wants=network-online.target
+After=network-online.target chrony.service
+# В режиме gpsd форвардер читает NMEA из моста /dev/lora-gps
+After=lora-gps-bridge.service
+
+[Service]
+Type=simple
+WorkingDirectory=@CONF_DIR@
+ExecStartPre=/bin/bash @INSTALL_DIR@/tools/reset_lgw.sh start
+ExecStart=@INSTALL_DIR@/packet_forwarder/lora_pkt_fwd
+ExecStopPost=/bin/bash @INSTALL_DIR@/tools/reset_lgw.sh stop
+Restart=on-failure
+RestartSec=10
+# Концентратор сбрасывается через GPIO и SPI — нужен root
+User=root
+SyslogIdentifier=lora-pkt-fwd
+
+[Install]
+WantedBy=multi-user.target

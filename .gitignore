@@ -1,0 +1,5 @@
+gateway.env
+*.bak
+*.lora-gps.bak
+__pycache__/
+*.pyc
