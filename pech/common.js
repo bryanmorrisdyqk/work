@@ -133,12 +133,15 @@ const numbering = {
   }],
 };
 
-function doc(children, footerText) {
+function doc(children, footerText, opts = {}) {
   return new Document({
     numbering,
     styles: { default: { document: { run: { font: FONT, size: 22 } } } },
     sections: [{
-      properties: { page: { margin: { top: 1000, bottom: 1000, left: 900, right: 900 } } },
+      properties: { page: {
+        size: opts.landscape ? { width: 11906, height: 16838, orientation: d.PageOrientation.LANDSCAPE } : undefined,
+        margin: { top: 1000, bottom: 1000, left: 900, right: 900 },
+      } },
       footers: footerText ? {
         default: new d.Footer({
           children: [new Paragraph({
